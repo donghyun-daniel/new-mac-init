@@ -47,8 +47,8 @@ script will attempt to install it for you.
 1. **Clone this repository** somewhere on your Mac:
 
    ```sh
-   git clone <your‑fork‑url> ~/macbook-m3-dev-setup
-   cd ~/macbook-m3-dev-setup
+   git clone git@github.com:donghyun-daniel/new-mac-init.git ~/workspace/macbook-m3-dev-setup
+   cd ~/workspace/macbook-m3-dev-setup
    ```
 
 2. **Run the setup script**:
