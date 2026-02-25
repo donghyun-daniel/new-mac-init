@@ -24,6 +24,24 @@ if ! command -v brew >/dev/null 2>&1; then
   echo "Homebrew not found. Installing Homebrew…"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   echo "Homebrew installation complete."
+
+  # After Homebrew is installed, the brew binary lives in /opt/homebrew/bin but is not
+  # yet on our PATH.  Follow Homebrew's guidance and immediately evaluate the
+  # shellenv so that subsequent brew commands in this script work without requiring
+  # a new terminal session.  We also append the shellenv export to ~/.zprofile so
+  # future shells will pick up Homebrew automatically.  Without this, commands like
+  # `brew update` would fail with “command not found” when run immediately after
+  # installation (as encountered during testing).
+  BREW_PREFIX="/opt/homebrew"
+  SHELLENV_COMMAND="$BREW_PREFIX/bin/brew shellenv"
+  # Append to ~/.zprofile if the eval line is not already present
+  if ! grep -Fq "brew shellenv" "$HOME/.zprofile" 2>/dev/null; then
+    echo "Appending Homebrew shellenv to ~/.zprofile…"
+    echo "eval \"$($SHELLENV_COMMAND)\"" >> "$HOME/.zprofile"
+  fi
+  # Evaluate the environment for the current session
+  echo "Evaluating Homebrew shellenv for current session…"
+  eval "$($SHELLENV_COMMAND)"
 fi
 
 echo "Updating Homebrew…"
